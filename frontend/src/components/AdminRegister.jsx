@@ -6,6 +6,7 @@ const AdminRegister = () => {
   const [policeId, setPoliceId] = useState('');
   const [password, setPassword] = useState('');
   const [policeIdPhoto, setPoliceIdPhoto] = useState(null);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -16,12 +17,19 @@ const AdminRegister = () => {
     formData.append('policeIdPhoto', policeIdPhoto);
 
     try {
-      await axios.post('http://localhost:5000/auth/register/admin', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      navigate('/dashboard');
+      const response = await axios.post(
+        'http://localhost:5000/auth/register/admin',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true,
+        }
+      );
+      console.log('Admin register response:', response.data); // Debug log
+      navigate('/home'); // Redirect to home
     } catch (err) {
-      console.error(err.response.data);
+      console.error('Admin register error:', err.response ? err.response.data : err.message);
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -29,6 +37,7 @@ const AdminRegister = () => {
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-6 rounded shadow-md w-96">
         <h2 className="text-2xl mb-4 text-center">Admin Register</h2>
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
         <form onSubmit={handleRegister}>
           <input
             type="text"

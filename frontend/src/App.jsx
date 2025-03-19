@@ -6,6 +6,7 @@ import Login from './components/Login';
 import AdminLogin from './components/AdminLogin';
 import Register from './components/Register';
 import AdminRegister from './components/AdminRegister';
+import Home from './components/Home';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -14,26 +15,52 @@ function App() {
     const checkAuth = async () => {
       try {
         const res = await axios.get('http://localhost:5000/auth/profile', { withCredentials: true });
+        console.log('Profile response:', res.data); // Debug log
         setUser(res.data);
       } catch (err) {
+        console.error('Profile error:', err.response ? err.response.data : err.message);
         setUser(null);
       }
     };
     checkAuth();
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:5000/auth/logout', {}, { withCredentials: true });
+      setUser(null);
+      window.location.href = '/';
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
-        <h1 className="text-3xl font-bold text-center p-4">Haventrail</h1>
+        <header className="flex justify-between items-center p-4 bg-blue-500 text-white">
+          <h1 className="text-3xl font-bold">Haventrail</h1>
+          {user && (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+            >
+              Logout
+            </button>
+          )}
+        </header>
         <Routes>
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin-register" element={<AdminRegister />} />
           <Route
+            path="/home"
+            element={user ? <Home user={user} /> : <Navigate to="/" />}
+          />
+          <Route
             path="/dashboard"
-            element={user ? <Map /> : <Navigate to="/" />}
+            element={user ? <Map user={user} /> : <Navigate to="/" />}
           />
         </Routes>
       </div>

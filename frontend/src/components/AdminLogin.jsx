@@ -5,15 +5,22 @@ import axios from 'axios';
 const AdminLogin = () => {
   const [policeId, setPoliceId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/auth/login/admin', { policeId, password });
-      navigate('/dashboard');
+      const response = await axios.post(
+        'http://localhost:5000/auth/login/admin',
+        { policeId, password },
+        { withCredentials: true }
+      );
+      console.log('Admin login response:', response.data);
+      navigate('/home');
     } catch (err) {
-      console.error(err.response.data);
+      console.error('Admin login error:', err.response ? err.response.data : err.message);
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
@@ -21,6 +28,7 @@ const AdminLogin = () => {
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-6 rounded shadow-md w-96">
         <h2 className="text-2xl mb-4 text-center">Admin Login</h2>
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
         <form onSubmit={handleLogin}>
           <input
             type="text"
