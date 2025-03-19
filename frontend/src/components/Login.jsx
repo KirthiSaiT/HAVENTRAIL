@@ -16,8 +16,8 @@ const Login = () => {
         { email, password },
         { withCredentials: true }
       );
-      console.log('Login response:', response.data); // Debug log to confirm success
-      navigate('/home', { replace: true }); // Redirect to /home, replace prevents back navigation
+      console.log('Login response:', response.data); // Debug log
+      navigate('/home', { replace: true }); // Redirect to home
     } catch (err) {
       console.error('Login error:', err.response ? err.response.data : err.message);
       setError(err.response?.data?.message || 'Login failed. Please try again.');

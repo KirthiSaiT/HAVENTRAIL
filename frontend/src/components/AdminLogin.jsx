@@ -17,7 +17,7 @@ const AdminLogin = () => {
         { withCredentials: true }
       );
       console.log('Admin login response:', response.data);
-      navigate('/home');
+      navigate('/home', { replace: true }); // Redirect to home
     } catch (err) {
       console.error('Admin login error:', err.response ? err.response.data : err.message);
       setError(err.response?.data?.message || 'Login failed. Please try again.');

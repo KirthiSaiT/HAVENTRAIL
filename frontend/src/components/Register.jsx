@@ -16,8 +16,8 @@ const Register = () => {
         { email, password },
         { withCredentials: true }
       );
-      console.log('Register response:', response.data); // Debug log
-      navigate('/home'); // Redirect to home
+      console.log('Register response:', response.data);
+      navigate('/home', { replace: true }); // Redirect to home
     } catch (err) {
       console.error('Register error:', err.response ? err.response.data : err.message);
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

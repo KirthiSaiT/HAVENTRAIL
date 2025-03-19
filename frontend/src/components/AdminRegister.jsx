@@ -25,8 +25,8 @@ const AdminRegister = () => {
           withCredentials: true,
         }
       );
-      console.log('Admin register response:', response.data); // Debug log
-      navigate('/home'); // Redirect to home
+      console.log('Admin register response:', response.data);
+      navigate('/home', { replace: true }); // Redirect to home
     } catch (err) {
       console.error('Admin register error:', err.response ? err.response.data : err.message);
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

@@ -50,10 +50,22 @@ function App() {
           )}
         </header>
         <Routes>
-          <Route path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin-register" element={<AdminRegister />} />
+          <Route
+            path="/"
+            element={user ? <Navigate to="/home" /> : <Register />}
+          />
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/home" /> : <Login />}
+          />
+          <Route
+            path="/admin-login"
+            element={user ? <Navigate to="/home" /> : <AdminLogin />}
+          />
+          <Route
+            path="/admin-register"
+            element={user ? <Navigate to="/home" /> : <AdminRegister />}
+          />
           <Route
             path="/home"
             element={user ? <Home user={user} /> : <Navigate to="/" />}
